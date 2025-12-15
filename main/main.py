@@ -9,7 +9,6 @@ import win32gui
 userName = "adrie" # Put your user name here
 pathToSongs = fr"C:\Users\{userName}\AppData\Local\osu!\Songs"
 
-
 ##### All the functions
 
 def getMapName():
@@ -40,7 +39,7 @@ def getMapName():
         print("Something went wrong. Please try again") # Please tell me that this will never appear
         return -1
 
-def getMapFolder(artist, title): # Look for the right beatmap in the Songs folder
+def getMapFolder(artist, title):
     # Get all folders inside Songs
     folders = [f for f in os.listdir(pathToSongs) if os.path.isdir(os.path.join(pathToSongs, f))]
 
@@ -62,12 +61,18 @@ def getMapFile(folderPath, title, difficulty):
     print("Beatmap file not found. Please check your folders")
     return -1
 
+def getMapInformations(folderPath, mapFile):
+    with open(f"{folderPath}\{mapFile}") as beatmap:
+        rawInformations = beatmap.read()
+        return rawInformations
+
 ##### Main code
 
 keyboard.wait("x")
 artist, title, difficulty = getMapName()
 if not -1 in [artist, title, difficulty]:
     folderPath = getMapFolder(artist, title)
-    MapInformations = getMapFile(folderPath, title, difficulty)
-    if MapInformations != -1:
-        print(MapInformations)
+    mapFile = getMapFile(folderPath, title, difficulty)
+    if mapFile != -1:
+        mapInformations = getMapInformations(folderPath,mapFile)
+        print(mapInformations)
