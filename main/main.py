@@ -102,9 +102,9 @@ def translateInformations(mapInformations):
     for circle in range(len(HitObjects)-1):
         HitObjects[circle] = HitObjects[circle].split(",")
         if len(HitObjects[circle]) == 6: # Spinner
-            hitSpinner(timer, HitObjects[circle])
+            timer = hitSpinner(timer, HitObjects[circle])
         elif len(HitObjects[circle]) == 5: # Hit Circle
-            continue
+            timer = hitCircle(timer, HitObjects[circle])
         else: # Slider
             continue
 
@@ -114,9 +114,12 @@ def hitSpinner(timer, information):
     startTime = int(information[2])
     endTime = int(information[5])
 
-    # Wait until spinner start
-    startWait = time.time()
-    while (time.time() - startWait) * 1000 < startTime - timer:
+    last = time.time()
+    while timer < startTime:
+        now = time.time()
+        elapsed = (now - last) * 1000
+        timer += elapsed
+        last = now
         time.sleep(0.001)
 
     # Move to spinner center
@@ -148,6 +151,31 @@ def hitSpinner(timer, information):
     keyboard.release("w")
     win32api.SetCursorPos((screenX, screenY)) # Return cursor to center
 
+    return endTime
+
+def hitCircle(timer, information):
+    startX = int(information[0])
+    startY = int(information[1])
+    startTime = int(information[2])
+
+    last = time.time()
+    while timer < startTime:
+        now = time.time()
+        elapsed = (now - last) * 1000
+        timer += elapsed
+        last = now
+        time.sleep(0.001)
+
+
+    # Move to circle position
+    screenX, screenY = osuToScreen(startX, startY)
+    win32api.SetCursorPos((screenX, screenY))
+    time.sleep(0.02)
+
+    # Press circle key
+    keyboard.press_and_release("w")
+    return startTime
+
 ##### Main code
 
 keyboard.wait("x")
@@ -158,8 +186,7 @@ if not -1 in [artist, title, difficulty]:
     if mapFile != -1:
         mapRawInformations = getMapInformations(folderPath,mapFile)
         translateInformations(mapRawInformations)
-        
-
+    
 
 ####################
 """
