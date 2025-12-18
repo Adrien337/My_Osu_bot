@@ -10,10 +10,8 @@ import win32gui
 
 ##### Path to Osu! map folder
 
-userName = "adrie" # Put your user name here
-pathToSongs = fr"C:\Users\{userName}\AppData\Local\osu!\Songs"
-
-############### From now on, please for god sake, DO NOT TOUCH
+userName = "" # Put your user name here
+pathToSongs = fr"C:\Users\{userName}\AppData\Local\osu!\Songs" # Change this if osu! is installed somewhere else
 
 ##### Screen units
 
@@ -106,7 +104,7 @@ def translateInformations(mapInformations):
         elif len(HitObjects[circle]) == 5: # Hit Circle
             timer = hitCircle(timer, HitObjects[circle])
         else: # Slider
-            continue
+            timer = hitSlider(timer, HitObjects[circle])
 
 def hitSpinner(timer, information):
     startX = int(information[0])
@@ -176,6 +174,11 @@ def hitCircle(timer, information):
     keyboard.press_and_release("w")
     return startTime
 
+def hitSlider(timer, information):
+    # HELL NAH
+    # HOW TF AM I SUPPOSED TO DO
+    return
+
 ##### Main code
 
 keyboard.wait("x")
@@ -191,7 +194,7 @@ if not -1 in [artist, title, difficulty]:
 ####################
 """
 256,192,1358,8,4,6530 # SPINNER (start_x, start_y, start_time, type, hitSound, end_time)
-120,348,6875,6,0,B|204:384|304:332,1,160,2|2 # SLIDER
-288,96,9116,5,2 # HIT CIRCLE
+120,348,6875,6,0,B|204:384|304:332,1,160,2|2 # SLIDER (start_x, start_y, start_time, type, hitSound, curveType|curvePoints, slides, length, edgeSounds|edgeSets)
+288,96,9116,5,2 # HIT CIRCLE (start_x, start_y, start_time, type, hitSound)
 """
 ####################
